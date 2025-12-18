@@ -1,4 +1,4 @@
-*! version 1.3.0  18dec2025
+*! version 1.3.1  18dec2025
 program define ntfy
     version 14
     syntax anything(name=args id="Message or Topic+Message") [, Title(string) Priority(string) Tags(string) DELAY(string) TOPIC(string)]
@@ -79,7 +79,7 @@ program define ntfy
         shell powershell -NoProfile -Command "Invoke-RestMethod -Uri 'https://ntfy.sh/`final_topic'' -Method Post -Body '`ps_message'' `ps_header_cmd'"
     }
     else {
-        shell curl -s `headers' -d "`message'" ntfy.sh/`final_topic' >/dev/null 2>&1 &
+        shell curl -s `headers' -d "`message'" ntfy.sh/`final_topic' >/dev/null &
     }
     
     di as txt "Notification sent to ntfy.sh/`final_topic'"
