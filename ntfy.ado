@@ -79,18 +79,19 @@ program define ntfy
         shell powershell -NoProfile -Command "Invoke-RestMethod -Uri 'https://ntfy.sh/`final_topic'' -Method Post -Body '`ps_message'' `ps_header_cmd'"
     }
     else {
-        * FIX: Use 'sh -c' to handle backgrounding. This hides the PID output 
-        * and allows standard '2>&1' redirection even on tcsh systems.
+        * FIX: Use 'sh -c' with SINGLE quotes.
+        * This hides PID output, supports standard redirection, and avoids tcsh quoting errors.
         
-        * 1. Build the standard curl command
+        * 1. Build the raw curl command (standard bash/zsh syntax)
         local curl_cmd curl -s `headers' -d "`message'" ntfy.sh/`final_topic' >/dev/null 2>&1 &
         
-        * 2. Escape double quotes ( " -> \" ) so they pass through the shell wrapper safely
-        local curl_cmd = subinstr(`"`curl_cmd'"', char(34), "\"+char(34), .)
+        * 2. Escape any single quotes inside the command ( ' becomes '\'' )
+        * This ensures the command can be safely wrapped in single quotes below.
+        local curl_cmd = subinstr(`"`curl_cmd'"', "'", "'\''", .)
         
-        * 3. Execute via sh -c
-        shell sh -c "`curl_cmd'"
-    }
+        * 3. Execute using sh -c '...'
+        shell sh -c '`curl_cmd''
+    }    
     
     di as txt "Notification sent to ntfy.sh/`final_topic'"
 end
