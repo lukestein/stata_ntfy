@@ -1,0 +1,7 @@
+v 3
+d ntfy: Send notifications to ntfy.sh from Stata
+d 
+d Author: Luke Stein
+d URL: https://github.com/lukestein/stata_ntfy
+d
+p ntfy
