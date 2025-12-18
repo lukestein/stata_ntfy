@@ -12,3 +12,4 @@ d Support: https://github.com/lukestein/stata_ntfy
 d
 f ntfy.ado
 f ntfy.sthlp
+f ntfy_set.ado
