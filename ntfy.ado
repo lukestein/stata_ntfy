@@ -1,4 +1,4 @@
-*! version 1.3.2  18dec2025
+*! version 1.3.3  18dec2025
 program define ntfy
     version 14
     syntax anything(name=args id="Message or Topic+Message") [, Title(string) Priority(string) Tags(string) DELAY(string) TOPIC(string)]
@@ -79,7 +79,17 @@ program define ntfy
         shell powershell -NoProfile -Command "Invoke-RestMethod -Uri 'https://ntfy.sh/`final_topic'' -Method Post -Body '`ps_message'' `ps_header_cmd'"
     }
     else {
-        quietly shell curl -s `headers' -d "`message'" ntfy.sh/`final_topic' >/dev/null &
+        * FIX: Use 'sh -c' to handle backgrounding. This hides the PID output 
+        * and allows standard '2>&1' redirection even on tcsh systems.
+        
+        * 1. Build the standard curl command
+        local curl_cmd curl -s `headers' -d "`message'" ntfy.sh/`final_topic' >/dev/null 2>&1 &
+        
+        * 2. Escape double quotes ( " -> \" ) so they pass through the shell wrapper safely
+        local curl_cmd = subinstr(`"`curl_cmd'"', char(34), "\"+char(34), .)
+        
+        * 3. Execute via sh -c
+        shell sh -c "`curl_cmd'"
     }
     
     di as txt "Notification sent to ntfy.sh/`final_topic'"
