@@ -1,4 +1,5 @@
 # ntfy: Send notifications to ntfy.sh from Stata
+
 `ntfy` is a lightweight Stata module to send push notifications to [ntfy.sh](https://ntfy.sh) using standard HTTP requests.
 
 
@@ -65,6 +66,10 @@ else {
     ntfy my_topic "Fail", tags(error) priority(high)
 }
 ```
+
+## Alternatives
+
+Inspired by `[statapush](https://github.com/wschpero/statapush)` which uses [Pushbullet](http://pushbullet.com/), [Pushover](https://pushover.net/), or [IFTTT](https://ifttt.com/) rather than [ntfy.sh](https://ntfy.sh)
 
 
 ## Author
