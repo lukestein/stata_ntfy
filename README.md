@@ -87,7 +87,7 @@ else {
 
 ## Alternatives
 
-Inspired by `[statapush](https://github.com/wschpero/statapush)` which uses [Pushbullet](http://pushbullet.com/), [Pushover](https://pushover.net/), or [IFTTT](https://ifttt.com/) rather than [ntfy.sh](https://ntfy.sh)
+Inspired by [statapush](https://github.com/wschpero/statapush) which uses [Pushbullet](http://pushbullet.com/), [Pushover](https://pushover.net/), or [IFTTT](https://ifttt.com/) rather than [ntfy.sh](https://ntfy.sh)
 
 
 ## Author
