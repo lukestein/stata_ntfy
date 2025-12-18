@@ -1,4 +1,4 @@
-*! version 1.2.0  18dec2025
+*! version 1.3.0  18dec2025
 program define ntfy
     version 14
     syntax anything(name=args id="Message or Topic+Message") [, Title(string) Priority(string) Tags(string) DELAY(string) TOPIC(string)]
@@ -6,32 +6,32 @@ program define ntfy
     /* -------------------------------------------------------------------------
        1. Load Preferences & Parse Input
        ------------------------------------------------------------------------- */
-    * Attempt to load defaults if not already set
+    * Ensure defaults are loaded
     if "$NTFY_TOPIC" == "" {
+        capture program drop ntfy_prefs
         capture ntfy_prefs
     }
 
-    * Tokenize input to check if we have 1 word or 2+
     gettoken t1 t2 : args
     
     * LOGIC TREE
     
-    * A. Explicit Option: `ntfy "msg", topic(xyz)`
+    * A. Explicit Option: ntfy "msg", topic(xyz)
     if "`topic'" != "" {
         local final_topic "`topic'"
-        local message "`args'"
+        local message `"`args'"'
     }
-    * B. Two Arguments: `ntfy xyz "msg"` (Override Default)
+    * B. Two Arguments: ntfy xyz "msg" (Override Default)
     else if `"`t2'"' != "" {
         local final_topic "`t1'"
-        local message "`t2'"
+        local message `"`t2'"'
     }
-    * C. One Argument + Default Exists: `ntfy "msg"`
+    * C. One Argument + Default Exists: ntfy "msg" -> Sends to Default
     else if `"`t2'"' == "" & "$NTFY_TOPIC" != "" {
         local final_topic "$NTFY_TOPIC"
-        local message "`t1'"
+        local message `"`t1'"'
     }
-    * D. One Argument + No Default: `ntfy xyz`
+    * D. One Argument + No Default: ntfy xyz -> Sends "Job completed" to xyz
     else {
         local final_topic "`t1'"
         local message "Stata job completed."
@@ -42,7 +42,7 @@ program define ntfy
        ------------------------------------------------------------------------- */
     local message = trim(`"`message'"')
     
-    * Strip outer quotes
+    * Strip outer quotes (if user provided "Message")
     if substr(`"`message'"', 1, 1) == char(34) & substr(`"`message'"', -1, 1) == char(34) {
         local msg_len = length(`"`message'"') - 2
         local message = substr(`"`message'"', 2, `msg_len')
@@ -67,7 +67,6 @@ program define ntfy
        4. Execution based on OS
        ------------------------------------------------------------------------- */
     if c(os) == "Windows" {
-        * WINDOWS (PowerShell)
         local ps_headers ""
         if `"`title'"' != ""    local ps_headers `ps_headers' "Title"='`title''; 
         if `"`priority'"' != "" local ps_headers `ps_headers' "Priority"='`priority''; 
@@ -80,7 +79,6 @@ program define ntfy
         shell powershell -NoProfile -Command "Invoke-RestMethod -Uri 'https://ntfy.sh/`final_topic'' -Method Post -Body '`ps_message'' `ps_header_cmd'"
     }
     else {
-        * MAC / UNIX (cURL)
         shell curl -s `headers' -d "`message'" ntfy.sh/`final_topic' >/dev/null 2>&1 &
     }
     

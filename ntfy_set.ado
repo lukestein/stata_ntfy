@@ -1,9 +1,8 @@
-*! version 1.0.0  18dec2025
+*! version 1.1.0  18dec2025
 program define ntfy_set
     version 14
     syntax anything(name=topic id="Default Topic")
     
-    * Clean the topic name
     local topic = trim(`"`topic'"')
     
     * Locate the PERSONAL directory
@@ -11,15 +10,15 @@ program define ntfy_set
     
     * Create the prefs file
     capture file close fh
-    file open fh using "`personal_dir'ntfy_prefs.ado", write text replace
+    quietly file open fh using "`personal_dir'ntfy_prefs.ado", write text replace
     file write fh "*! Auto-generated ntfy preferences" _n
     file write fh "program define ntfy_prefs" _n
     file write fh "    global NTFY_TOPIC `topic'" _n
     file write fh "end" _n
     file close fh
     
-    * Load it immediately for this session
-    discard
+    * Force reload of the new settings
+    capture program drop ntfy_prefs
     ntfy_prefs
     
     di as txt "Default ntfy topic set to: " as result "$NTFY_TOPIC"
