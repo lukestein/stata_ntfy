@@ -1,4 +1,4 @@
-*! version 1.3.3  18dec2025
+*! version 1.3.4  18dec2025
 program define ntfy
     version 14
     syntax anything(name=args id="Message or Topic+Message") [, Title(string) Priority(string) Tags(string) DELAY(string) TOPIC(string)]
