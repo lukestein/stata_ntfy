@@ -1,11 +1,15 @@
 # ntfy: Send notifications to ntfy.sh from Stata
 
-`ntfy` is a lightweight Stata module to send push notifications to [ntfy.sh](https://ntfy.sh) using standard HTTP requests.
+`ntfy` is a lightweight Stata module to send push notifications to [ntfy.sh](https://ntfy.sh) using standard HTTP requests. This can be useful to notify you when long-running Stata jobs complete, or to alert you of errors. Just install the free ntfy app on your phone—no signups required—and you can receive notifications instantly.
 
 
 It is designed to be **platform-independent** and **dependency-light**. It does not require Python or external plugins; it uses native system tools:
 * **Windows:** PowerShell (`Invoke-RestMethod`)
 * **Mac/Linux:** cURL (`shell curl`)
+
+If you are worried about others seeing your notifications or spamming you with extra notifications, make sure to choose a secure topic name and read the [ntfy.sh documentation](https://ntfy.sh).
+
+*Note*: The code in this package was largely written by LLMs and I have tested it only (some) on Mac and (very lightly) on Unix. I have not tested at all on Windows! Please [open a github issue (or ideally a pull request)](https://github.com/lukestein/stata_ntfy) if you encounter any problems.
 
 ## Installation
 
