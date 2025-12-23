@@ -40,7 +40,7 @@ The `ntfy_get` command also returns the topic in `r(topic)` for programmatic use
 
 ```stata
 ntfy_get
-local my_topic = r(topic)
+local my_topic `r(topic)'
 ```
 
 

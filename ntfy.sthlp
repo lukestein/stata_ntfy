@@ -93,7 +93,7 @@ Once set, you can call {cmd:ntfy} with just a message, and it will route to your
 {cmd:ntfy_get} saves the following in {cmd:r()}:
 
 {synoptset 15 tabbed}{...}
-{p2col 5 15 19 2: Scalars}{p_end}
+{p2col 5 15 19 2: Macros}{p_end}
 {synopt:{cmd:r(topic)}}current default topic (empty string if not set){p_end}
 
 
@@ -108,7 +108,7 @@ Once set, you can call {cmd:ntfy} with just a message, and it will route to your
 
 {pstd}2b. Access the topic programmatically:{p_end}
 {phang2}{cmd:. ntfy_get}{p_end}
-{phang2}{cmd:. local my_topic = r(topic)}{p_end}
+{phang2}{cmd:. local my_topic `r(topic)'}{p_end}
 
 {pstd}3. Send a simple message (uses default topic):{p_end}
 {phang2}{cmd:. ntfy "Regression analysis finished"}{p_end}
