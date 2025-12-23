@@ -3,6 +3,7 @@
 {viewerjumpto "Syntax" "ntfy##syntax"}{...}
 {viewerjumpto "Description" "ntfy##description"}{...}
 {viewerjumpto "Options" "ntfy##options"}{...}
+{viewerjumpto "Saved results" "ntfy##saved_results"}{...}
 {viewerjumpto "Examples" "ntfy##examples"}{...}
 {title:Title}
 
@@ -85,6 +86,17 @@ Once set, you can call {cmd:ntfy} with just a message, and it will route to your
 {opt width(integer)} sets the width in pixels for the exported graph PNG. The default is 1200 pixels. Only applies when graph or graphname is specified.
 
 
+{marker saved_results}{...}
+{title:Saved results}
+
+{pstd}
+{cmd:ntfy_get} saves the following in {cmd:r()}:
+
+{synoptset 15 tabbed}{...}
+{p2col 5 15 19 2: Scalars}{p_end}
+{synopt:{cmd:r(topic)}}current default topic (empty string if not set){p_end}
+
+
 {marker examples}{...}
 {title:Examples}
 
@@ -93,6 +105,10 @@ Once set, you can call {cmd:ntfy} with just a message, and it will route to your
 
 {pstd}2. View the current default topic:{p_end}
 {phang2}{cmd:. ntfy_get}{p_end}
+
+{pstd}2b. Access the topic programmatically:{p_end}
+{phang2}{cmd:. ntfy_get}{p_end}
+{phang2}{cmd:. local my_topic = r(topic)}{p_end}
 
 {pstd}3. Send a simple message (uses default topic):{p_end}
 {phang2}{cmd:. ntfy "Regression analysis finished"}{p_end}

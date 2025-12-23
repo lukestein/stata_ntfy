@@ -21,7 +21,7 @@ program define ntfy_get, rclass
     }
     else {
         di as txt "No default ntfy topic is currently set."
-        di as txt "Use {cmd:ntfy_set} to set a default topic."
+        di as txt "Use " as result "ntfy_set" as txt " to set a default topic."
         return local topic ""
     }
 end
