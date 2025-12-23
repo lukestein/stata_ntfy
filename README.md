@@ -30,6 +30,19 @@ You can set a **default topic** so you don't have to type it every time. This sa
 ntfy_set my_secret_topic
 ```
 
+To view the currently set default topic:
+
+```stata
+ntfy_get
+```
+
+The `ntfy_get` command also returns the topic in `r(topic)` for programmatic use:
+
+```stata
+ntfy_get
+local my_topic = r(topic)
+```
+
 
 ## Usage
 

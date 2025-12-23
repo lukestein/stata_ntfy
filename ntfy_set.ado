@@ -1,4 +1,4 @@
-*! version 1.1.0  18dec2025
+*! version 1.5.0  23dec2025
 program define ntfy_set
     version 14
     syntax anything(name=topic id="Default Topic")
