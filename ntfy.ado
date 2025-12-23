@@ -1,4 +1,4 @@
-*! version 1.4.0  23dec2025
+*! version 1.5.0  23dec2025
 program define ntfy
     version 14
     syntax anything(name=args id="Message or Topic+Message") [, Title(string) Priority(string) Tags(string) DELAY(string) TOPIC(string) GRAPH GRAPHName(string) Width(integer 1200)]

@@ -1,8 +1,9 @@
 {smcl}
-{* *! version 1.4.0  23dec2025}{...}
+{* *! version 1.5.0  23dec2025}{...}
 {viewerjumpto "Syntax" "ntfy##syntax"}{...}
 {viewerjumpto "Description" "ntfy##description"}{...}
 {viewerjumpto "Options" "ntfy##options"}{...}
+{viewerjumpto "Saved results" "ntfy##saved_results"}{...}
 {viewerjumpto "Examples" "ntfy##examples"}{...}
 {title:Title}
 
@@ -20,6 +21,9 @@
 {p 8 17 2}
 {cmdab:ntfy_set}
 {it:default_topic}
+
+{p 8 17 2}
+{cmdab:ntfy_get}
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
@@ -51,6 +55,9 @@ On {bf:Mac/Linux}, it uses cURL (shell curl).
 {cmd:ntfy_set} saves a default topic to your personal adopath preferences. 
 Once set, you can call {cmd:ntfy} with just a message, and it will route to your default topic automatically.
 
+{pstd}
+{cmd:ntfy_get} displays the currently set default topic (if any) and returns it for programmatic use.
+
 {marker options}{...}
 {title:Options}
 
@@ -79,16 +86,34 @@ Once set, you can call {cmd:ntfy} with just a message, and it will route to your
 {opt width(integer)} sets the width in pixels for the exported graph PNG. The default is 1200 pixels. Only applies when graph or graphname is specified.
 
 
+{marker saved_results}{...}
+{title:Saved results}
+
+{pstd}
+{cmd:ntfy_get} saves the following in {cmd:r()}:
+
+{synoptset 15 tabbed}{...}
+{p2col 5 15 19 2: Macros}{p_end}
+{synopt:{cmd:r(topic)}}current default topic (empty string if not set){p_end}
+
+
 {marker examples}{...}
 {title:Examples}
 
 {pstd}1. Set a default topic (do this once):{p_end}
 {phang2}{cmd:. ntfy_set my_secret_topic}{p_end}
 
-{pstd}2. Send a simple message (uses default topic):{p_end}
+{pstd}2. View the current default topic:{p_end}
+{phang2}{cmd:. ntfy_get}{p_end}
+
+{pstd}2b. Access the topic programmatically:{p_end}
+{phang2}{cmd:. ntfy_get}{p_end}
+{phang2}{cmd:. local my_topic `r(topic)'}{p_end}
+
+{pstd}3. Send a simple message (uses default topic):{p_end}
 {phang2}{cmd:. ntfy "Regression analysis finished"}{p_end}
 
-{pstd}3. Override the default topic for a specific message:{p_end}
+{pstd}4. Override the default topic for a specific message:{p_end}
 {phang2}{cmd:. ntfy other_topic "This goes to a different channel"}{p_end}
 
 {pstd}High priority error alert with a title and emoji:{p_end}
