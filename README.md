@@ -36,14 +36,6 @@ To view the currently set default topic:
 ntfy_get
 ```
 
-The `ntfy_get` command also returns the topic in `r(topic)` for programmatic use:
-
-```stata
-ntfy_get
-local my_topic `r(topic)'
-```
-
-
 ## Usage
 
 ### 1. Using a Default Topic

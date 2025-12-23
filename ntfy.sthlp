@@ -3,7 +3,7 @@
 {viewerjumpto "Syntax" "ntfy##syntax"}{...}
 {viewerjumpto "Description" "ntfy##description"}{...}
 {viewerjumpto "Options" "ntfy##options"}{...}
-{viewerjumpto "Saved results" "ntfy##saved_results"}{...}
+{viewerjumpto "Get saved default topic" "ntfy##saved_results"}{...}
 {viewerjumpto "Examples" "ntfy##examples"}{...}
 {title:Title}
 
@@ -48,8 +48,8 @@
 It is designed to be lightweight and platform-independent.
 
 {pstd}
-On {bf:Windows}, it uses PowerShell (Invoke-RestMethod).{break}
 On {bf:Mac/Linux}, it uses cURL (shell curl).
+On {bf:Windows}, it uses PowerShell (Invoke-RestMethod). Note this is untested!{break}
 
 {pstd}
 {cmd:ntfy_set} saves a default topic to your personal adopath preferences. 
@@ -87,7 +87,7 @@ Once set, you can call {cmd:ntfy} with just a message, and it will route to your
 
 
 {marker saved_results}{...}
-{title:Saved results}
+{title:Get saved default topic}
 
 {pstd}
 {cmd:ntfy_get} saves the following in {cmd:r()}:
