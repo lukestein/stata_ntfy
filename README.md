@@ -57,6 +57,26 @@ ntfy "Code failed to converge", title("Stata Error") priority(high) tags(warning
 
 ```
 
+### 4. Including Graphs
+
+You can attach Stata graphs to your notifications:
+
+```stata
+sysuse auto, clear
+scatter mpg weight
+
+ntfy "Analysis complete", graph title("Results") tags(chart_with_upwards_trend)
+
+```
+
+For named graphs:
+
+```stata
+scatter mpg weight, name(myscatter)
+ntfy "Check out this scatter plot", graphname(myscatter) width(800)
+
+```
+
 ## Syntax
 
 ```stata
@@ -71,6 +91,9 @@ ntfy [topic] ["message"] [, options]
 | `tags(string)` | Comma-separated emojis or tags (e.g., `warning`, `tada`). |
 | `delay(string)` | Schedule delivery (e.g., `10m`, `9am`, `tomorrow`). |
 | `topic(string)` | Explicitly specify the target topic (alternative to positional argument). |
+| `graph` | Include the default graph (Graph) as a PNG image. |
+| `graphname(string)` | Specify name of graph to include (implies `graph` option). |
+| `width(integer)` | Width in pixels for exported graph (default: 1200). |
 
 ## Workflow Example
 

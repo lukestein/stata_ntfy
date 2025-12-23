@@ -1,7 +1,7 @@
-*! version 1.3.4  18dec2025
+*! version 1.4.0  23dec2025
 program define ntfy
     version 14
-    syntax anything(name=args id="Message or Topic+Message") [, Title(string) Priority(string) Tags(string) DELAY(string) TOPIC(string)]
+    syntax anything(name=args id="Message or Topic+Message") [, Title(string) Priority(string) Tags(string) DELAY(string) TOPIC(string) GRAPH GRAPHName(string) Width(integer 1200)]
 
     /* -------------------------------------------------------------------------
        1. Load Preferences & Parse Input
@@ -52,7 +52,41 @@ program define ntfy
     local message = subinstr(`"`message'"', char(34), "'", .)
 
     /* -------------------------------------------------------------------------
-       3. Construct Headers
+       3. Handle Graph Export (if requested)
+       ------------------------------------------------------------------------- */
+    local graphfile ""
+    
+    * If graphname is specified, it implies graph option
+    if "`graphname'" != "" {
+        local graph "graph"
+    }
+    
+    if "`graph'" != "" {
+        * Create temporary file for graph
+        tempfile tmpgraph
+        local graphfile "`tmpgraph'.png"
+        
+        * Determine which graph to export
+        if "`graphname'" != "" {
+            * Export named graph
+            capture graph export "`graphfile'", name(`graphname') as(png) width(`width') replace
+            if _rc != 0 {
+                di as error "Error exporting graph '`graphname''. Graph may not exist."
+                exit _rc
+            }
+        }
+        else {
+            * Export default Graph
+            capture graph export "`graphfile'", as(png) width(`width') replace
+            if _rc != 0 {
+                di as error "Error exporting default graph. Graph may not exist."
+                exit _rc
+            }
+        }
+    }
+
+    /* -------------------------------------------------------------------------
+       4. Construct Headers
        ------------------------------------------------------------------------- */
     local headers ""
     if `"`title'"' != "" {
@@ -64,7 +98,7 @@ program define ntfy
     if `"`delay'"' != ""    local headers `headers' -H "Delay: `delay'"
 
     /* -------------------------------------------------------------------------
-       4. Execution based on OS
+       5. Execution based on OS
        ------------------------------------------------------------------------- */
     if c(os) == "Windows" {
         local ps_headers ""
@@ -75,22 +109,42 @@ program define ntfy
         
         if `"`ps_headers'"' != "" local ps_header_cmd -Headers @{`ps_headers'}
         
-        local ps_message = subinstr(`"`message'"', "'", "''", .)
-        shell powershell -NoProfile -Command "Invoke-RestMethod -Uri 'https://ntfy.sh/`final_topic'' -Method Post -Body '`ps_message'' `ps_header_cmd'"
+        if "`graphfile'" != "" {
+            * Upload graph file with message header
+            local ps_message = subinstr(`"`message'"', "'", "''", .)
+            shell powershell -NoProfile -Command "$headers = @{`ps_headers' 'Message'='`ps_message''}; Invoke-RestMethod -Uri 'https://ntfy.sh/`final_topic'' -Method Put -InFile '`graphfile'' -Headers $headers"
+        }
+        else {
+            * Send text message
+            local ps_message = subinstr(`"`message'"', "'", "''", .)
+            shell powershell -NoProfile -Command "Invoke-RestMethod -Uri 'https://ntfy.sh/`final_topic'' -Method Post -Body '`ps_message'' `ps_header_cmd'"
+        }
     }
     else {
-        * FIX: Use 'sh -c' with SINGLE quotes.
-        * This hides PID output, supports standard redirection, and avoids tcsh quoting errors.
-        
-        * 1. Build the raw curl command (standard bash/zsh syntax)
-        local curl_cmd curl -s `headers' -d "`message'" ntfy.sh/`final_topic' >/dev/null 2>&1 &
-        
-        * 2. Escape any single quotes inside the command ( ' becomes '\'' )
-        * This ensures the command can be safely wrapped in single quotes below.
-        local curl_cmd = subinstr(`"`curl_cmd'"', "'", "'\''", .)
-        
-        * 3. Execute using sh -c '...'
-        shell sh -c '`curl_cmd''
+        if "`graphfile'" != "" {
+            * Upload graph file with message header using curl -T
+            local curl_cmd curl -s `headers' -H "Message: `message'" -T "`graphfile'" ntfy.sh/`final_topic' >/dev/null 2>&1 &
+            
+            * Escape any single quotes inside the command
+            local curl_cmd = subinstr(`"`curl_cmd'"', "'", "'\''", .)
+            
+            * Execute using sh -c '...'
+            shell sh -c '`curl_cmd''
+        }
+        else {
+            * FIX: Use 'sh -c' with SINGLE quotes.
+            * This hides PID output, supports standard redirection, and avoids tcsh quoting errors.
+            
+            * 1. Build the raw curl command (standard bash/zsh syntax)
+            local curl_cmd curl -s `headers' -d "`message'" ntfy.sh/`final_topic' >/dev/null 2>&1 &
+            
+            * 2. Escape any single quotes inside the command ( ' becomes '\'' )
+            * This ensures the command can be safely wrapped in single quotes below.
+            local curl_cmd = subinstr(`"`curl_cmd'"', "'", "'\''", .)
+            
+            * 3. Execute using sh -c '...'
+            shell sh -c '`curl_cmd''
+        }
     }    
     
     di as txt "Notification sent to ntfy.sh/`final_topic'"

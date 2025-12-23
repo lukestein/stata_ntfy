@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.3.0  18dec2025}{...}
+{* *! version 1.4.0  23dec2025}{...}
 {viewerjumpto "Syntax" "ntfy##syntax"}{...}
 {viewerjumpto "Description" "ntfy##description"}{...}
 {viewerjumpto "Options" "ntfy##options"}{...}
@@ -29,6 +29,9 @@
 {synopt:{opt tags(string)}}comma-separated list of tags or emojis{p_end}
 {synopt:{opt delay(string)}}delay delivery (e.g., "10m", "9am"){p_end}
 {synopt:{opt topic(string)}}explicitly specify topic (overrides other logic){p_end}
+{synopt:{opt graph}}include the default graph (Graph) as a PNG image{p_end}
+{synopt:{opt graphn:ame(string)}}specify name of graph to include (implies graph option){p_end}
+{synopt:{opt w:idth(integer)}}width in pixels for exported graph (default: 1200){p_end}
 {synoptline}
 {p2colreset}{...}
 
@@ -66,6 +69,15 @@ Once set, you can call {cmd:ntfy} with just a message, and it will route to your
 {phang}
 {opt topic(string)} forces the notification to go to this specific topic, ignoring defaults or other arguments.
 
+{phang}
+{opt graph} includes the current default graph (named "Graph") as a PNG image attachment with the notification.
+
+{phang}
+{opt graphname(string)} specifies the name of a graph window to include as a PNG image. This option automatically enables the graph option, so you do not need to specify both.
+
+{phang}
+{opt width(integer)} sets the width in pixels for the exported graph PNG. The default is 1200 pixels. Only applies when graph or graphname is specified.
+
 
 {marker examples}{...}
 {title:Examples}
@@ -86,6 +98,16 @@ Once set, you can call {cmd:ntfy} with just a message, and it will route to your
 {phang2}{cmd:. capture noise do my_analysis.do}{p_end}
 {phang2}{cmd:. if _rc == 0 ntfy "Success", tags(tada)}{p_end}
 {phang2}{cmd:. else ntfy "Fail", tags(error) priority(high)}{p_end}
+
+{pstd}Include a graph with the notification:{p_end}
+{phang2}{cmd:. sysuse auto, clear}{p_end}
+{phang2}{cmd:. scatter mpg weight}{p_end}
+{phang2}{cmd:. ntfy "Analysis complete", graph title("Results") tags(chart_with_upwards_trend)}{p_end}
+
+{pstd}Include a named graph with custom width:{p_end}
+{phang2}{cmd:. sysuse auto, clear}{p_end}
+{phang2}{cmd:. scatter mpg weight, name(myscatter)}{p_end}
+{phang2}{cmd:. ntfy "Check out this scatter plot", graphname(myscatter) width(800)}{p_end}
 
 
 {title:Author}
