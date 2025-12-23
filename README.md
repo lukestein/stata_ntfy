@@ -78,6 +78,8 @@ ntfy "Check out this scatter plot", graphname(myscatter) width(800)
 
 ```
 
+Note that the ntfy server only caches images for a limited time, so you may want to open your notification soon after sending it.
+
 ## Syntax
 
 ```stata
@@ -92,8 +94,8 @@ ntfy [topic] ["message"] [, options]
 | `tags(string)` | Comma-separated emojis or tags (e.g., `warning`, `tada`). |
 | `delay(string)` | Schedule delivery (e.g., `10m`, `9am`, `tomorrow`). |
 | `topic(string)` | Explicitly specify the target topic (alternative to positional argument). |
-| `graph` | Include the default graph (Graph) as a PNG image. |
-| `graphname(string)` | Specify name of graph to include (implies `graph` option). |
+| `graph` | Include the most recent (topmost) graph as a PNG image. |
+| `graphname(string)` | Specify name of a graph to include (implies `graph` option). |
 | `width(integer)` | Width in pixels for exported graph (default: 1200). |
 
 ## Workflow Example

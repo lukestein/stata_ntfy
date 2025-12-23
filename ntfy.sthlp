@@ -29,7 +29,7 @@
 {synopt:{opt tags(string)}}comma-separated list of tags or emojis{p_end}
 {synopt:{opt delay(string)}}delay delivery (e.g., "10m", "9am"){p_end}
 {synopt:{opt topic(string)}}explicitly specify topic (overrides other logic){p_end}
-{synopt:{opt graph}}include the default graph (Graph) as a PNG image{p_end}
+{synopt:{opt graph}}include the topmost graph as a PNG image{p_end}
 {synopt:{opt graphn:ame(string)}}specify name of graph to include (implies graph option){p_end}
 {synopt:{opt w:idth(integer)}}width in pixels for exported graph (default: 1200){p_end}
 {synoptline}
@@ -70,7 +70,7 @@ Once set, you can call {cmd:ntfy} with just a message, and it will route to your
 {opt topic(string)} forces the notification to go to this specific topic, ignoring defaults or other arguments.
 
 {phang}
-{opt graph} includes the current default graph (named "Graph") as a PNG image attachment with the notification.
+{opt graph} includes the current topmost graph as a PNG image attachment with the notification.
 
 {phang}
 {opt graphname(string)} specifies the name of a graph window to include as a PNG image. This option automatically enables the graph option, so you do not need to specify both.
