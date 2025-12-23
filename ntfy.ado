@@ -110,9 +110,9 @@ program define ntfy
         if `"`ps_headers'"' != "" local ps_header_cmd -Headers @{`ps_headers'}
         
         if "`graphfile'" != "" {
-            * Upload graph file with message as filename
+            * Upload graph file with message header
             local ps_message = subinstr(`"`message'"', "'", "''", .)
-            shell powershell -NoProfile -Command "$headers = @{`ps_headers' 'Filename'='`ps_message''}; Invoke-RestMethod -Uri 'https://ntfy.sh/`final_topic'' -Method Put -InFile '`graphfile'' -Headers $headers"
+            shell powershell -NoProfile -Command "$headers = @{`ps_headers' 'Message'='`ps_message''}; Invoke-RestMethod -Uri 'https://ntfy.sh/`final_topic'' -Method Put -InFile '`graphfile'' -Headers $headers"
         }
         else {
             * Send text message
@@ -122,8 +122,8 @@ program define ntfy
     }
     else {
         if "`graphfile'" != "" {
-            * Upload graph file with message as filename using curl -T
-            local curl_cmd curl -s `headers' -H "Filename: `message'" -T "`graphfile'" ntfy.sh/`final_topic' >/dev/null 2>&1 &
+            * Upload graph file with message header using curl -T
+            local curl_cmd curl -s `headers' -H "Message: `message'" -T "`graphfile'" ntfy.sh/`final_topic' >/dev/null 2>&1 &
             
             * Escape any single quotes inside the command
             local curl_cmd = subinstr(`"`curl_cmd'"', "'", "'\''", .)
